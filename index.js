@@ -25,8 +25,6 @@ class App{
         GatewayIntentBits.GuildMessageReactions
       ]
     });
-
-    this.message_map = new Map();
   }
 
   async start(){
