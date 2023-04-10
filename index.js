@@ -253,7 +253,6 @@ class App{
   }
 
   // メンバーとギルドだけ取得しといて時間後の準備しとく
-  // IDの規則はguild+member
   async alarm_command(interaction){
     const guild = interaction.guild;
 
@@ -265,6 +264,7 @@ class App{
     if(!guild_alarms) guild_alarms = new Map();
     if(guild_alarms.get(member_id)){
       interaction.reply("もう設定されてるよ");
+      return;
     }
 
     const alarm_hour = interaction.options.get("hour").value;
