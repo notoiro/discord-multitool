@@ -318,6 +318,15 @@ class App{
       return;
     }
 
+    if(info.is_play){
+      const connection = getVoiceConnection(guild_id);
+      if(!connection) return;
+      connection.destroy();
+
+      interaction.reply("こういうこと？");
+      return;
+    }
+
     clearTimeout(info.timer_id);
     guild_alarms.delete(member_id);
 
@@ -496,13 +505,23 @@ class App{
     const new_voice_id = new_s.channelId;
     const old_voice_id = old_s.channelId;
 
+    const user_id = this.client.user.id;
+
+    let current_user, guild, channel;
+
+    try{
+      guild = await this.client.guilds.fetch(guild_id);
+      current_user = await guild.members.fetch(user_id);
+    }catch(e){
+      console.log(e);
+      guild_alarms.delete(member_id);
+      return;
+    }
+
     if(old_voice_id === new_voice_id) return;
 
-    let guild, channel;
-
-    if(new_s.channelId === null){
+    if(new_s.channelId !== current_user.voice.channelId){
       try{
-        guild = await this.client.guilds.fetch(guild_id);
         channel = await this.client.channels.fetch(info.text);
       }catch(e){
         console.log(e);
